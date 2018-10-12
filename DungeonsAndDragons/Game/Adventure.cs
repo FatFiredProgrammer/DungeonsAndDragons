@@ -14,6 +14,11 @@ namespace DungeonsAndDragons.Game
         public const int ExperiencePointsPerEnemy = 35;
 
         /// <summary>
+        ///     A constant for the amount of health recovered between rounds.
+        /// </summary>
+        public const int HealthRecoveredPerRound = 20;
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="Adventure" /> class.
         ///     Note that the user interface is passed in a parameter.
         ///     This is called inversion of control.
@@ -59,6 +64,8 @@ namespace DungeonsAndDragons.Game
             return enemy;
         }
 
+        private static int GetExperiencePoints(Character enemy) => ExperiencePointsPerEnemy + enemy.Level;
+
         public void Play(Character player)
         {
             if (player == null)
@@ -88,8 +95,12 @@ namespace DungeonsAndDragons.Game
                 // If player is alive, award experience
                 if (player.IsAlive)
                 {
-                    player.ExperiencePoints += ExperiencePointsPerEnemy;
+                    player.ExperiencePoints += GetExperiencePoints(enemy);
                     WriteLine($"{player.Name} now has {player.ExperiencePoints} XP");
+
+                    // Recover a little health
+                    // Cannot exceed maximum.
+                    player.HitPoints = Math.Min(player.HitPoints + HealthRecoveredPerRound, player.MaxHitPoints);
                 }
 
                 // Check if we should level up.
