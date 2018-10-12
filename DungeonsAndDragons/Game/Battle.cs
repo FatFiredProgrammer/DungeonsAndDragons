@@ -49,7 +49,7 @@ namespace DungeonsAndDragons.Game
             Player.TotalDamageDealt += playerDamage;
             Enemy.HitPoints -= playerDamage;
             Enemy.TotalDamageTaken += playerDamage;
-            userInterface.WriteLine($"{Player.Name} did {playerDamage} damage and has {Player.HitPoints} HP.");
+            userInterface.WriteLine($"{Player.Name} did {playerDamage} damage and {Enemy.Name} has {Enemy.HitPoints} HP.");
 
             // Enemy only gets to strike if not already dead!
             if (Enemy.IsAlive)
@@ -58,7 +58,7 @@ namespace DungeonsAndDragons.Game
                 Enemy.TotalDamageDealt += enemyDamage;
                 Player.HitPoints -= enemyDamage;
                 Player.TotalDamageTaken += enemyDamage;
-                userInterface.WriteLine($"{Enemy.Name} did {enemyDamage} damage and has {Enemy.HitPoints} HP.");
+                userInterface.WriteLine($"{Enemy.Name} did {enemyDamage} damage and {Player.Name} has {Player.HitPoints} HP.");
             }
 
             userInterface.WriteLine(string.Empty);

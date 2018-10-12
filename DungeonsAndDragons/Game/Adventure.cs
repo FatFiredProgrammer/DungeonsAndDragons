@@ -11,7 +11,7 @@ namespace DungeonsAndDragons.Game
         /// <summary>
         ///     A constant for the experience points per enemy defeated.
         /// </summary>
-        public const int ExperiencePointsPerEnemy = 35;
+        public const int ExperiencePointsPerEnemy = 25;
 
         /// <summary>
         ///     A constant for the amount of health recovered between rounds.
@@ -41,7 +41,7 @@ namespace DungeonsAndDragons.Game
         private static Character GenerateEnemy(Character player)
         {
             // Create a random level here from 1 to 20 but < than player's level (if possible).
-            var level = Math.Max(1, Math.Min(Dice.Die20.Roll(), player.Level - 1));
+            var level = player.Level == 1 ? 1: Dice.Next2(1, player.Level - 1);
             var enemy = new Character
             {
                 Level = level,

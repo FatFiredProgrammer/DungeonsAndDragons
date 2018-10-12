@@ -8,23 +8,6 @@ namespace DungeonsAndDragons.Game
     public sealed class Die
     {
         /// <summary>
-        ///     The random number generator.
-        ///     This is static. We only have one of these.
-        ///     On most Windows systems, Random objects created within 15 milliseconds of one another are likely to have identical
-        ///     seed values.
-        ///     So, we won't really get random numbers if we create a lot of these quickly.
-        ///     Instead we use one of them.
-        /// </summary>
-        private static readonly Random _random = new Random();
-
-        /// <summary>
-        ///     The lock object.
-        ///     The random number generator is not thread safe.
-        ///     Even though we don't use threads, we are going to be thorough and be thread safe.
-        /// </summary>
-        private static readonly object _lockObject = new object();
-
-        /// <summary>
         ///     Initializes a new instance of the <see cref="Die" /> class with a specific number of sides.
         /// </summary>
         /// <param name="sides">The sides.</param>
@@ -47,16 +30,11 @@ namespace DungeonsAndDragons.Game
         ///     Rolls this die.
         /// </summary>
         /// <returns>System.Int32.</returns>
-        public int Roll()
-        {
-            // For thread safety, we lock before using the random number generator.
-            lock (_lockObject)
-            {
-                // NOTE: The range for next is inclusive on the lower end but exclusive on the upper end.
-                // We need to add one to the upper range so we get the correct range of values back.
-                return _random.Next(1, Sides + 1);
-            }
-        }
+        /// <remarks>
+        ///     NOTE: The range for next is inclusive on the lower end but exclusive on the upper end.
+        ///     We need to add one to the upper range so we get the correct range of values back.
+        /// </remarks>
+        public int Roll() => Dice.Next(1, Sides + 1);
 
         /// <inheritdoc />
         public override string ToString() => $"{Sides} sided die";

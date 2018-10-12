@@ -9,23 +9,6 @@ namespace DungeonsAndDragons.Game.Weapons
     public static class WeaponFactory
     {
         /// <summary>
-        ///     The random number generator.
-        ///     This is static. We only have one of these.
-        ///     On most Windows systems, Random objects created within 15 milliseconds of one another are likely to have identical
-        ///     seed values.
-        ///     So, we won't really get random numbers if we create a lot of these quickly.
-        ///     Instead we use one of them.
-        /// </summary>
-        private static readonly Random _random = new Random();
-
-        /// <summary>
-        ///     The lock object.
-        ///     The random number generator is not thread safe.
-        ///     Even though we don't use threads, we are going to be thorough and be thread safe.
-        /// </summary>
-        private static readonly object _lockObject = new object();
-
-        /// <summary>
         ///     A list which has lambdas which create weapons.
         ///     This is a very advanced concept.
         /// </summary>
@@ -50,14 +33,11 @@ namespace DungeonsAndDragons.Game.Weapons
         /// <returns>DungeonsAndDragons.Game.IWeapon.</returns>
         public static IWeapon Generate()
         {
-            lock (_lockObject)
-            {
-                // Which weapon to generate?
-                var which = _random.Next(0, _weaponGenerator.Count);
+            // Which weapon to generate?
+            var which = Dice.Next(0, _weaponGenerator.Count);
 
-                // Call the lambda to generate it.
-                return _weaponGenerator[which]();
-            }
+            // Call the lambda to generate it.
+            return _weaponGenerator[which]();
         }
     }
 }
