@@ -79,10 +79,7 @@ namespace DungeonsAndDragons.Game
 
                 // Battle it out
                 var battle = new Battle(player, enemy);
-                while (player.IsAlive && enemy.IsAlive)
-                {
-                    battle.Fight(_userInterface);
-                }
+                battle.Fight(_userInterface);
 
                 // What happened to the enemy?
                 WriteLine(enemy.IsAlive ? $"{enemy.Name} was victorious." : $"{enemy.Name} was killed.");

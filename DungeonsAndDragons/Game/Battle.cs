@@ -24,7 +24,16 @@ namespace DungeonsAndDragons.Game
             if (userInterface == null)
                 throw new ArgumentNullException(nameof(userInterface));
 
+            while (Player.IsAlive && Enemy.IsAlive)
+            {
+                FightOneRound(userInterface);
+            }
+        }
+
+        private void FightOneRound(IUserInterface userInterface)
+        {
             ++Turn;
+
 #if !DEBUG
 
 // Only sleep running in release mode.
@@ -32,7 +41,6 @@ namespace DungeonsAndDragons.Game
                 Thread.Sleep(TimeSpan.FromSeconds(2));
 #endif
 
-            userInterface.WriteLine("Sir:");
             userInterface.WriteLine($"Turn {Turn}");
 
             // Calculate the damage and the consequences.
