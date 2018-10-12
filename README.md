@@ -1,2 +1,3 @@
-# DungeonsAndDragons
-A sample dungeons and dragons C# project just for teaching.
+# Dungeons and Dragons C#
+
+A sample / teaching project showing some useful C# concepts while implementing a very basic DnD game.
