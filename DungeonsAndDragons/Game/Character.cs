@@ -49,7 +49,9 @@ namespace DungeonsAndDragons.Game
                     return false;
 
                 // You need to defeat about level# enemies.
-                return ExperiencePoints >= Level * Adventure.ExperiencePointsPerEnemy;
+                // Sigma N for 1..N is equivalent to (N * (N+1)) / 2
+                // In other words, at each level, you need another Level * Adventure.ExperiencePointsPerEnemy XP.
+                return ExperiencePoints >= ((Level * (Level + 1)) / 2) * Adventure.ExperiencePointsPerEnemy;
             }
         }
 
