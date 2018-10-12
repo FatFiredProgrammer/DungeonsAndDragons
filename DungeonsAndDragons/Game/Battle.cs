@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 namespace DungeonsAndDragons.Game
 {
@@ -27,7 +26,8 @@ namespace DungeonsAndDragons.Game
 
             ++Turn;
 #if !DEBUG
-            // Only sleep running in release mode.
+
+// Only sleep running in release mode.
             if (Turn > 1)
                 Thread.Sleep(TimeSpan.FromSeconds(2));
 #endif
@@ -37,18 +37,22 @@ namespace DungeonsAndDragons.Game
 
             // Calculate the damage and the consequences.
             var playerDamage = Player.CalculateDamage();
-            var enemyDamage = Enemy.CalculateDamage();
 
-            Player.HitPoints -= enemyDamage;
-            Player.TotalDamageTaken += enemyDamage;
             Player.TotalDamageDealt += playerDamage;
-
             Enemy.HitPoints -= playerDamage;
             Enemy.TotalDamageTaken += playerDamage;
-            Enemy.TotalDamageDealt += enemyDamage;
-
             userInterface.WriteLine($"{Player.Name} did {playerDamage} damage and has {Player.HitPoints} HP.");
-            userInterface.WriteLine($"{Enemy.Name} did {enemyDamage} damage and has {Enemy.HitPoints} HP.");
+
+            // Enemy only gets to strike if not already dead!
+            if (Enemy.IsAlive)
+            {
+                var enemyDamage = Enemy.CalculateDamage();
+                Enemy.TotalDamageDealt += enemyDamage;
+                Player.HitPoints -= enemyDamage;
+                Player.TotalDamageTaken += enemyDamage;
+                userInterface.WriteLine($"{Enemy.Name} did {enemyDamage} damage and has {Enemy.HitPoints} HP.");
+            }
+
             userInterface.WriteLine(string.Empty);
         }
     }
