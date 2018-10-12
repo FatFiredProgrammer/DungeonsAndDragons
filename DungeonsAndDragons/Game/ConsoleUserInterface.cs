@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace DungeonsAndDragons.Game
 {
@@ -16,6 +17,7 @@ namespace DungeonsAndDragons.Game
         public void WriteLine(string text)
         {
             Console.WriteLine(text);
+            Debug.WriteLine(text);
         }
     }
 }

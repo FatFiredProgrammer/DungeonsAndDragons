@@ -13,6 +13,6 @@ namespace DungeonsAndDragons.Game.Weapons
 
         /// <inheritdoc />
         /// <remarks>Note that we use Math.Max to make sure our damage is not negative.</remarks>
-        public override int CalculateDamage(Character character) => Math.Max(0, GetBaseDamage(character) + Dice.Die12.Roll());
+        public override int CalculateDamage(Character character) => Math.Max(1, GetBaseDamage(character) + Dice.Die12.Roll());
     }
 }

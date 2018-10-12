@@ -41,7 +41,17 @@ namespace DungeonsAndDragons.Game
 
         public int MaxHitPoints => ((Concentration - 10) / 2) * Level + 50;
 
-        public bool ShouldLevelUp => IsAlive && ExperiencePoints > Level * 100 + 100;
+        public bool ShouldLevelUp
+        {
+            get
+            {
+                if (!IsAlive)
+                    return false;
+
+                // You need to defeat about level# enemies.
+                return ExperiencePoints >= Level * Adventure.ExperiencePointsPerEnemy;
+            }
+        }
 
         /// <summary>
         ///     Calculates the damage a character wielding this weapon will cause.
@@ -49,6 +59,9 @@ namespace DungeonsAndDragons.Game
         /// <returns>Damage caused.</returns>
         public int CalculateDamage() => Weapon.CalculateDamage(this);
 
+        /// <summary>
+        /// Levels up a character
+        /// </summary>
         public void LevelUp()
         {
             Level++;
@@ -56,6 +69,9 @@ namespace DungeonsAndDragons.Game
             ResetHitPoints();
         }
 
+        /// <summary>
+        /// Resets the hit points to the maximum value.
+        /// </summary>
         public void ResetHitPoints()
         {
             HitPoints = MaxHitPoints;

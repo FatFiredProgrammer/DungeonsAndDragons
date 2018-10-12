@@ -40,12 +40,12 @@ namespace DungeonsAndDragons.Game
             var enemyDamage = Enemy.CalculateDamage();
 
             Player.HitPoints -= enemyDamage;
-            Player.TotalDamageTaken -= enemyDamage;
-            Player.TotalDamageDealt -= playerDamage;
+            Player.TotalDamageTaken += enemyDamage;
+            Player.TotalDamageDealt += playerDamage;
 
             Enemy.HitPoints -= playerDamage;
-            Enemy.TotalDamageTaken -= playerDamage;
-            Enemy.TotalDamageDealt -= enemyDamage;
+            Enemy.TotalDamageTaken += playerDamage;
+            Enemy.TotalDamageDealt += enemyDamage;
 
             userInterface.WriteLine($"{Player.Name} did {playerDamage} damage and has {Player.HitPoints} HP.");
             userInterface.WriteLine($"{Enemy.Name} did {enemyDamage} damage and has {Enemy.HitPoints} HP.");

@@ -11,7 +11,7 @@ namespace DungeonsAndDragons.Game
         /// <summary>
         ///     A constant for the experience points per enemy defeated.
         /// </summary>
-        private const int ExperiencePointsPerEnemy = 35;
+        public const int ExperiencePointsPerEnemy = 35;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Adventure" /> class.
@@ -22,7 +22,7 @@ namespace DungeonsAndDragons.Game
         /// </summary>
         /// <param name="userInterface">The user interface.</param>
         public Adventure(IUserInterface userInterface)
-            => _userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
+            => _userInterface = userInterface;
 
         private readonly IUserInterface _userInterface;
 
@@ -35,13 +35,16 @@ namespace DungeonsAndDragons.Game
         /// <returns>Character.</returns>
         private static Character GenerateEnemy(Character player)
         {
+            // Create a random level here from 1 to 20 but < than player's level (if possible).
+            var level = Math.Max(1, Math.Min(Dice.Die20.Roll(), player.Level - 1));
             var enemy = new Character
             {
+                Level = level,
                 HitPoints = 20,
                 MagicPoints = 80,
-                Strength = 12 + player.Level,
+                Strength = 12 + level,
                 Dexterity = 10,
-                Concentration = 10 + player.Level,
+                Concentration = 10 + level,
                 Intelligence = 10,
                 Wisdom = 10,
                 Charisma = 10,
@@ -61,17 +64,18 @@ namespace DungeonsAndDragons.Game
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
 
-            _userInterface.WriteLine("Starting adventure...");
+            WriteLine("Starting adventure...");
             player.ResetHitPoints();
-            _userInterface.WriteLine(player.ToString());
+            WriteLine(player.ToString());
 
             // While game is not over, keep trying.
             while (!GameOver(player))
             {
                 // Spawn an enemy
                 var enemy = GenerateEnemy(player);
-                _userInterface.WriteLine("Enemy spawned");
-                _userInterface.WriteLine($"{enemy}");
+                WriteLine();
+                WriteLine("Enemy spawned");
+                WriteLine($"{enemy}");
 
                 // Battle it out
                 var battle = new Battle(player, enemy);
@@ -80,28 +84,36 @@ namespace DungeonsAndDragons.Game
                     battle.Fight(_userInterface);
                 }
 
-                if (!enemy.IsAlive)
-                    _userInterface.WriteLine($"{enemy.Name} was killed.");
+                // What happened to the enemy?
+                WriteLine(enemy.IsAlive ? $"{enemy.Name} was victorious." : $"{enemy.Name} was killed.");
+                WriteLine($"{enemy}");
 
                 // If player is alive, award experience
                 if (player.IsAlive)
                 {
                     player.ExperiencePoints += ExperiencePointsPerEnemy;
-                    _userInterface.WriteLine($"{player.Name} has {player.ExperiencePoints} XP");
+                    WriteLine($"{player.Name} now has {player.ExperiencePoints} XP");
                 }
 
                 // Check if we should level up.
                 if (player.ShouldLevelUp)
                 {
                     player.LevelUp();
-                    _userInterface.WriteLine($"Congratulations! {player.Name} is now level {player.Level}!");
-                    _userInterface.WriteLine($"{player}");
+                    WriteLine($"Congratulations! {player.Name} is now level {player.Level}!");
                 }
+
+                // Write player's stats
+                WriteLine($"{player}");
             }
 
-            _userInterface.WriteLine(player.IsAlive ? "You win." : "You died.");
-            _userInterface.WriteLine("Game over...");
-            _userInterface.WriteLine(player.ToString());
+            WriteLine(player.IsAlive ? "You win." : "You died.");
+            WriteLine("Game over...");
+            WriteLine(player.ToString());
+        }
+
+        private void WriteLine(string text = null)
+        {
+            _userInterface?.WriteLine(text ?? string.Empty);
         }
     }
 }
